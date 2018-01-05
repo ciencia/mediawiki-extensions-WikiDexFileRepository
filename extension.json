@@ -1,0 +1,21 @@
+{
+	"name": "WikiDexFileRepository",
+	"version": "1.1.0",
+	"author": [
+		"Jesús Martínez (Ciencia Al Poder)"
+	],
+	"url": "https://github.com/ciencia/mediawiki-extensions-WikiDexFileRepository",
+	"descriptionmsg": "wikidexfilerepository-desc",
+	"license-name": "GPL-2.0+",
+	"type": "media",
+	"MessagesDirs": {
+		"WikiDexFileRepository": [
+			"i18n"
+		]
+	},
+	"AutoloadClasses": {
+		"LocalWikiDexRepo": "LocalWikiDexRepo.php",
+		"LocalWikiDexFile": "LocalWikiDexFile.php"
+	},
+	"manifest_version": 1
+}

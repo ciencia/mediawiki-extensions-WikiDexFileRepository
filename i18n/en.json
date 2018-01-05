@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ciencia Al Poder"
+		]
+	},
+	"wikidexfilerepository-desc": "Custom file repository for WikiDex, which improves caching."
+}
