@@ -5,6 +5,8 @@ when a new version of the file is uploaded (using the file timestamp).
 
 This extension requires custom rewrite rules on the web server to work.
 
+Requires MediaWiki 1.34 or newer.
+
 Typical URL of image:
 `http://mycdn/mwuploads/wikisite1/thumb/a/ab/Example.png/200px-Example.png`
 

@@ -29,9 +29,9 @@
  */
 class LocalWikiDexRepo extends LocalRepo {
 	function __construct( array $info = null ) {
-		$this->fileFactory = [ 'LocalWikiDexFile', 'newFromTitle' ];
-		$this->fileFactoryKey = [ 'LocalWikiDexFile', 'newFromKey' ];
-		$this->fileFromRowFactory = [ 'LocalWikiDexFile', 'newFromRow' ];
+		$this->fileFactory = [ LocalWikiDexFile::class, 'newFromTitle' ];
+		$this->fileFactoryKey = [ LocalWikiDexFile::class, 'newFromKey' ];
+		$this->fileFromRowFactory = [ LocalWikiDexFile::class, 'newFromRow' ];
 		parent::__construct( $info );
 	}
 }

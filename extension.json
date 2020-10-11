@@ -1,6 +1,6 @@
 {
 	"name": "WikiDexFileRepository",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"author": [
 		"Jesús Martínez (Ciencia Al Poder)"
 	],
@@ -17,5 +17,5 @@
 		"LocalWikiDexRepo": "LocalWikiDexRepo.php",
 		"LocalWikiDexFile": "LocalWikiDexFile.php"
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }

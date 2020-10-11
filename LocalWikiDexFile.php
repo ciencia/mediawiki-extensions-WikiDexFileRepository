@@ -22,74 +22,9 @@
  */
 
 class LocalWikiDexFile extends LocalFile {
-	const VERSION = 101; // cache version
-
-	// Copied from LocalFile to avoid self create a LocalFile class instead of
-	// a LocalWikiDexFile class
-	/**
-	 * Create a LocalFile from a title
-	 * Do not call this except from inside a repo class.
-	 *
-	 * Note: $unused param is only here to avoid an E_STRICT
-	 *
-	 * @param Title $title
-	 * @param FileRepo $repo
-	 * @param null $unused
-	 *
-	 * @return LocalFile
-	 */
-	static function newFromTitle( $title, $repo, $unused = null ) {
-		return new self( $title, $repo );
-	}
-
-	// Copied from LocalFile to avoid self create a LocalFile class instead of
-	// a LocalWikiDexFile class
-	/**
-	 * Create a LocalFile from a title
-	 * Do not call this except from inside a repo class.
-	 *
-	 * @param stdClass $row
-	 * @param FileRepo $repo
-	 *
-	 * @return LocalFile
-	 */
-	static function newFromRow( $row, $repo ) {
-		$title = Title::makeTitle( NS_FILE, $row->img_name );
-		$file = new self( $title, $repo );
-		$file->loadFromRow( $row );
-
-		return $file;
-	}
-
-	// Copied from LocalFile to avoid self create a LocalFile class instead of
-	// a LocalWikiDexFile class
-	/**
-	 * Create a LocalFile from a SHA-1 key
-	 * Do not call this except from inside a repo class.
-	 *
-	 * @param string $sha1 Base-36 SHA-1
-	 * @param LocalRepo $repo
-	 * @param string|bool $timestamp MW_timestamp (optional)
-	 * @return bool|LocalFile
-	 */
-	static function newFromKey( $sha1, $repo, $timestamp = false ) {
-		$dbr = $repo->getReplicaDB();
-
-		$conds = [ 'img_sha1' => $sha1 ];
-		if ( $timestamp ) {
-			$conds['img_timestamp'] = $dbr->timestamp( $timestamp );
-		}
-
-		$row = $dbr->selectRow( 'image', self::selectFields(), $conds, __METHOD__ );
-		if ( $row ) {
-			return self::newFromRow( $row, $repo );
-		} else {
-			return false;
-		}
-	}
 
 	function __construct( $title, $repo ) {
-		$this->repoClass = 'LocalWikiDexRepo';
+		$this->repoClass = LocalWikiDexRepo::class;
 		parent::__construct( $title, $repo );
 	}
 	
@@ -119,22 +54,29 @@ class LocalWikiDexFile extends LocalFile {
 	}
 
 	/**
-	 * Copied from getZoneUrl, wrap inside if, changed getUrlRel() by getUrlRelWithTimestamp()
+	 * Get the URL of the thumbnail directory, or a particular file if $suffix is specified
+	 *
+	 * @param bool|string $suffix If not false, the name of a thumbnail file
+	 * @return string Path
+	 */
+	function getThumbUrl( $suffix = false ) {
+		return $this->getZoneUrl( 'thumb', $suffix );
+	}
+
+	/**
+	 * Copied from getZoneUrl, SHOULD BE CALLED ONLY FOR zone = 'thumb',
+	 * changed getUrlRel() by getUrlRelWithTimestamp()
 	 *
 	 * @param string $zone Name of requested zone
 	 * @param bool|string $suffix If not false, the name of a file in zone
 	 * @return string Path
 	 */
-	function getZoneUrl( $zone, $suffix = false ) {
-		if ( $zone == 'thumb' ) {
-			$this->assertRepoDefined();
-			$ext = $this->getExtension();
-			$path = $this->repo->getZoneUrl( $zone, $ext ) . '/' . $this->getUrlRelWithTimestamp();
-			if ( $suffix !== false ) {
-				$path .= '/' . rawurlencode( $suffix );
-			}
-		} else {
-			return parent::getZoneUrl( $zone, $suffix );
+	private function getZoneUrl( $zone, $suffix = false ) {
+		$this->assertRepoDefined();
+		$ext = $this->getExtension();
+		$path = $this->repo->getZoneUrl( $zone, $ext ) . '/' . $this->getUrlRelWithTimestamp();
+		if ( $suffix !== false ) {
+			$path .= '/' . rawurlencode( $suffix );
 		}
 		return $path;
 	}
