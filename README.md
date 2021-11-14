@@ -88,13 +88,13 @@ server {
         }
         # Thumb image
         # Warning: Regexp variables are used in @thumb
-        location ~ "^/mwuploads/[a-z0-9]+/thumb/[0-9a-f]/[0-9a-f][0-9a-f]/[^/]+/(?<thumbwidth>[0-9]+)px-.*$" {
+        location ~ "^/mwuploads/[a-z0-9]+/thumb/[0-9a-f]/[0-9a-f][0-9a-f]/[^/]+/(page(?<thumbpage>\d+)-)?(?<thumbwidth>[0-9]+)px-.*$" {
             set $thumbarchived 0;
             expires $mwuploads_expire;
             try_files $uri $images_thumbfallback;
         }
         # Thumb image from archive
-        location ~ "^/mwuploads/[a-z0-9]+/thumb/archive/[0-9a-f]/[0-9a-f][0-9a-f]/[^/]+/(?<thumbwidth>[0-9]+)px-.*$" {
+        location ~ "^/mwuploads/[a-z0-9]+/thumb/archive/[0-9a-f]/[0-9a-f][0-9a-f]/[^/]+/(page(?<thumbpage>\d+)-)?(?<thumbwidth>[0-9]+)px-.*$" {
             set $mwuploads_longcache 1;
             set $thumbarchived 1;
             expires $mwuploads_expire;
@@ -107,7 +107,7 @@ server {
         # Run the thumb.php script
         include /etc/nginx/fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $images_mwinstallpath/thumb.php;
-        fastcgi_param QUERY_STRING f=$thumbfile&width=$thumbwidth&archived=$thumbarchived;
+        fastcgi_param QUERY_STRING f=$thumbfile&width=$thumbwidth&p=$thumbpage&archived=$thumbarchived;
         fastcgi_pass unix:/run/php/php-fpm.sock;
     }
 
